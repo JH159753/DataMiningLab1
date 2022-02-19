@@ -42,18 +42,9 @@ def get_games(username):
     moves = re.sub(r"\n", "", moves)
 
     timeFormat = specificGame["time_class"]
-
-    #printing stuff so I know it's working properly
-    printer.pprint(gameID)
-    printer.pprint(opponentUsername)
-    printer.pprint(playerElo)
-    printer.pprint(opponentElo)
-    printer.pprint(openingName)
-    printer.pprint(moves)
-    printer.pprint(gameResult)
-    printer.pprint(timeFormat)
-
+    #saves the needed things into data
     data = [gameID, opponentUsername, playerElo, opponentElo, openingName, moves, gameResult, timeFormat]
+
     with open("chess.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(data)
