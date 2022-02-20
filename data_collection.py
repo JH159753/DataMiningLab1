@@ -27,7 +27,11 @@ def save_one_game(specificGame, filename):
 
     #regex to pull only what comes after chess.com/openings/ because thats the opening name
     pgn = specificGame["pgn"]
-    openingName = re.search(r"\[ECOUrl \"https\:\/\/www.chess.com\/openings\/(.*?)\"\]", pgn).group(1)
+    match = re.search(r"\[ECOUrl \"https\:\/\/www.chess.com\/openings\/(.*?)\"\]", pgn)
+    if match != None: 
+        openingName = match.group(1)
+    else :
+        openingName = "not found"
 
     #probably also want to pull only moves from the pgn too
     moves = re.sub(r"\[.*?\]", "", pgn)
@@ -59,12 +63,15 @@ def get_dataset(filename, rows=None):
             amountOfMonths -= 1
             specificMonth = allMonthsPlayed.archives[amountOfMonths]
             allGamesInMonth = requests.get(specificMonth).json()
+
+            for game in allGamesInMonth["games"] :
+                save_one_game(game, filename)
             #This has to be fixed, I don't actually know how to know the amount of games in that month
-            amountOfGamesInMonth = len(allGamesInMonth)
-            while (amountOfGamesInMonth > 0) :
-                amountOfGamesInMonth -= 1
-                specificGame = allGamesInMonth["games"][amountOfGamesInMonth]
-                save_one_game(specificGame, filename)
+            #amountOfGamesInMonth = len(allGamesInMonth)
+            #while (amountOfGamesInMonth > 0) :
+            #    amountOfGamesInMonth -= 1
+            #    specificGame = allGamesInMonth["games"][amountOfGamesInMonth]
+            #    save_one_game(specificGame, filename)
     else:
         #this part doesn't actually work yet, I have to deal with the first bit or this is useless
         #pull only the correct amount of rows
