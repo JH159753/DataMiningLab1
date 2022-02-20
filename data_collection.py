@@ -66,22 +66,23 @@ def get_dataset(filename, rows=None):
 
             for game in allGamesInMonth["games"] :
                 save_one_game(game, filename)
-            #This has to be fixed, I don't actually know how to know the amount of games in that month
-            #amountOfGamesInMonth = len(allGamesInMonth)
-            #while (amountOfGamesInMonth > 0) :
-            #    amountOfGamesInMonth -= 1
-            #    specificGame = allGamesInMonth["games"][amountOfGamesInMonth]
-            #    save_one_game(specificGame, filename)
     else:
-        #this part doesn't actually work yet, I have to deal with the first bit or this is useless
         #pull only the correct amount of rows
-        while(rows > 0) :
-            printer.pprint((rows))
-            rows -= 1
-            save_one_game(specificGame, filename)
+        gamesSaved = 0
+        allMonthsPlayed = get_player_game_archives("jayyych")
+        amountOfMonths = len(allMonthsPlayed.archives)
+        while (amountOfMonths > 0) :
+            amountOfMonths -= 1
+            specificMonth = allMonthsPlayed.archives[amountOfMonths]
+            allGamesInMonth = requests.get(specificMonth).json()
+            for game in allGamesInMonth["games"] :
+                if gamesSaved >= rows:
+                    break
+                save_one_game(game, filename)
+                gamesSaved += 1
 
 
 
     
 
-get_dataset("chess")
+get_dataset("chess", 50)
