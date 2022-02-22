@@ -2,6 +2,7 @@ from chessdotcom import get_player_game_archives
 import pprint
 import requests
 import csv
+import pandas as pd
 import re #regex things for pulling data out of the PGN
 
 printer = pprint.PrettyPrinter()
@@ -83,8 +84,10 @@ def get_dataset(filename, rows=None):
                 save_one_game(game, filename)
                 gamesSaved += 1
 
-
+def main():
+    get_dataset('testMan', 5)
+    print(pd.read_csv('testMan.csv'))
 
     
-
-get_dataset("chess", 50)
+if __name__ == '__main__':
+    main()
