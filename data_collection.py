@@ -19,11 +19,13 @@ def save_one_game(specificGame, filename):
         opponentElo = specificGame["black"]["rating"]
         playerElo = specificGame["white"]["rating"]
         gameResult = specificGame["white"]["result"]
+        playerColor = "white"
     else :
         opponentUsername = specificGame["white"]["username"]
         opponentElo = specificGame["white"]["rating"]
         playerElo = specificGame["black"]["rating"]
         gameResult = specificGame["black"]["result"]
+        playerColor = "black"
 
     #regex to pull only what comes after chess.com/openings/ because thats the opening name
     pgn = specificGame["pgn"]
@@ -40,7 +42,7 @@ def save_one_game(specificGame, filename):
 
     timeFormat = specificGame["time_class"]
     #saves the needed things into data
-    data = [gameID, opponentUsername, playerElo, opponentElo, openingName, moves, gameResult, timeFormat] 
+    data = [gameID, opponentUsername, playerElo, opponentElo, openingName, moves, gameResult, timeFormat, playerColor] 
 
     with open(filename, "a", newline='') as f:
         writer = csv.writer(f)
