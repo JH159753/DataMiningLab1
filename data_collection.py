@@ -6,7 +6,7 @@ import pandas as pd
 import re #regex things for pulling data out of the PGN
 
 printer = pprint.PrettyPrinter()
-data = ['Game ID', 'opponent username', 'player elo', 'opponent elo', 'opening name', 'moves', 'game result', 'time format']
+data = ['Game ID', 'opponent username', 'player elo', 'opponent elo', 'opening name', 'moves', 'game result', 'time format', 'player color' 'elo difference', 'amount of moves']
 
 def save_one_game(specificGame, filename):
     #this part is pulling the data I want to put in the CSV
@@ -42,8 +42,17 @@ def save_one_game(specificGame, filename):
     moves = re.sub(r"\n", "", moves)
 
     timeFormat = specificGame["time_class"]
+    #calculates difference between my elo and opponent elo; if mine is higher, it will be positive, if mine is lower it will be negative
+    eloDifference = playerElo - opponentElo
+
+    if match != None:
+        amountOfMoves = re.search("(\d+)\.+[^.]*$", moves).group(1)
+    else:
+        amountOfMoves = 0
+
     #saves the needed things into data
-    data = [gameID, opponentUsername, playerElo, opponentElo, openingName, moves, gameResult, timeFormat, playerColor] 
+    data = [gameID, opponentUsername, playerElo, opponentElo, openingName, moves, gameResult, timeFormat, playerColor, eloDifference, amountOfMoves] 
+
 
     with open(filename, "a", newline='') as f:
         writer = csv.writer(f)
@@ -85,8 +94,8 @@ def get_dataset(filename, rows=None):
                 gamesSaved += 1
 
 def main():
-    get_dataset('testMan', 5)
-    print(pd.read_csv('testMan.csv'))
+    get_dataset('chess')
+    print(pd.read_csv('chess.csv'))
 
     
 if __name__ == '__main__':
